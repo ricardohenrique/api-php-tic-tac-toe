@@ -107,15 +107,23 @@ class MatchController extends Controller
     private function validateWinner(array $board, int $player) : int
     {
         $win = 0;
-        $canWin[0] = [$board[0], $board[1], $board[2]];
-        $canWin[1] = [$board[3], $board[4], $board[5]];
-        $canWin[2] = [$board[6], $board[7], $board[8]];
-        $canWin[3] = [$board[0], $board[3], $board[6]];
-        $canWin[4] = [$board[1], $board[4], $board[7]];
-        $canWin[5] = [$board[2], $board[5], $board[8]];
-        $canWin[6] = [$board[0], $board[4], $board[8]];
-        $canWin[7] = [$board[2], $board[4], $board[6]];
 
+        $canWin = [
+             // lines
+            [$board[0], $board[1], $board[2]],
+            [$board[3], $board[4], $board[5]],
+            [$board[6], $board[7], $board[8]],
+
+            // columns
+            [$board[0], $board[3], $board[6]],
+            [$board[1], $board[4], $board[7]],
+            [$board[2], $board[5], $board[8]],
+
+            // diagonals
+            [$board[0], $board[4], $board[8]],
+            [$board[2], $board[4], $board[6]]
+        ];
+        
         foreach ($canWin as $key => $can) {
             if (!(in_array(0, $can) || in_array($this->getWhoIsNext($player), $can))) {
                 $win = $player;
