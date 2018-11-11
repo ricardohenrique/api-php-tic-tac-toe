@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::get('match', 'MatchController@matches')->name('matches');
+Route::get('match/{id}', 'MatchController@match')->name('match');
+Route::put('match/{id}', 'MatchController@move')->name('move');
+Route::post('match', 'MatchController@create')->name('create_match');
+Route::delete('match/{id}', 'MatchController@delete')->name('delete_match');
