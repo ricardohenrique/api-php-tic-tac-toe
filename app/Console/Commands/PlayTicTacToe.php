@@ -11,22 +11,22 @@ class PlayTicTacToe extends Command
     use TicTacToeSupport;
 
     /**
-      * Variable to define board default
+      * Const to define board default
       * @access public
       * @name $BOARD
     */
-    public static $BOARD = [
+    private static $BOARD = [
         [0, 0, 0],
         [0, 0, 0],
         [0, 0, 0],
     ];
 
     /**
-      * Variable to define board default
+      * Variable to define players default
       * @access public
-      * @name $BOARD
+      * @name PLAYERS
     */
-    public static $PLAYERS = [
+    const PLAYERS = [
         'X' => 1,
         'O' => 2
     ];
@@ -77,11 +77,11 @@ class PlayTicTacToe extends Command
         $matchId = $match['id'];
         $validateMatch = false;
         while ($validateMatch == false) {
-            if (self::$PLAYERS[$player] == $match['next']) {
+            if (self::PLAYERS[$player] == $match['next']) {
                 $movement = $this->choice('What your movement?', $this->getRemainingMovement($match['board']));
             } else {
-                $this->info("Rodada da máquina");
-                sleep(2);
+                $this->info("Robot turn");
+                sleep(1);
                 $movement = $this->getMovement($match["board"]);
             }
             $this->matchBusiness->makeMovement($matchId, $movement);
