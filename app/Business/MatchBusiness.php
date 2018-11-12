@@ -19,36 +19,36 @@ class MatchBusiness
         0, 0, 0,
     ];
 
-	/**
-	 * Returns a list of matches or only one of them
-	 * @access public
-	 * @param integer $matchId | id of some match
-	 * @return array
-	 */ 
+    /**
+     * Returns a list of matches or only one of them
+     * @access public
+     * @param integer $matchId | id of some match
+     * @return array
+     */
     public function getMatch(int $matchId = 0) : array
     {
-    	$matches = new Matches;
-    	if($matchId) {
-    		return $matches->where("id", $matchId)->first()->toArray();
-    	}
+        $matches = new Matches;
+        if ($matchId) {
+            return $matches->where("id", $matchId)->first()->toArray();
+        }
         return $matches->get()->toArray();
     }
 
-	/**
-	 * Make a movement
-	 * @access public
-	 * @param integer $matchId | id of some match
-	 * @param integer $position | number of some position in the board
-	 * @return array
-	 */ 
+    /**
+     * Make a movement
+     * @access public
+     * @param integer $matchId | id of some match
+     * @param integer $position | number of some position in the board
+     * @return array
+     */
     public function makeMovement(int $matchId, int $position) : void
     {
         $match = $this->getMatch($matchId);
-        if(($match['winner'] != 0) || (!$this->validateBoard($match['board']))) {
-        	throw new MatchAlreadyFinishedException("match-already-finished");
+        if (($match['winner'] != 0) || (!$this->validateBoard($match['board']))) {
+            throw new MatchAlreadyFinishedException("match-already-finished");
         }
-        if(!$this->validateMovement($match['board'], $position)) {
-        	throw new IllegalMovementException("illegal-movement");
+        if (!$this->validateMovement($match['board'], $position)) {
+            throw new IllegalMovementException("illegal-movement");
         }
         $match['board'][$position] = $match['next'];
         $win = $this->validateWinner($match['board'], $match['next']);
@@ -61,24 +61,24 @@ class MatchBusiness
     }
 
     /**
-	 * Creates a new match and returns it
-	 * @access public
-	 * @return array
-	 */ 
+     * Creates a new match and returns it
+     * @access public
+     * @return array
+     */
     public function createMatch() : array
     {
-    	return factory(Matches::class)->create()->toArray();
+        return factory(Matches::class)->create()->toArray();
     }
 
     /**
-	 * Delete the match
-	 * @access public
-	 * @param integer $matchId | id of some match
-	 * @return array
-	 */ 
+     * Delete the match
+     * @access public
+     * @param integer $matchId | id of some match
+     * @return array
+     */
     public function deleteMatch($matchId) : bool
     {
-    	return Matches::destroy($matchId);
+        return Matches::destroy($matchId);
     }
 
     /**
@@ -89,7 +89,7 @@ class MatchBusiness
     */
     private function validateMovement(array $board, int $position) : bool
     {
-    	$validate = false;
+        $validate = false;
         if ($board[$position] == 0) {
             $validate = true;
         }
@@ -104,7 +104,7 @@ class MatchBusiness
     */
     private function validateBoard(array $board) : bool
     {
-    	$validate = false;
+        $validate = false;
         foreach ($board as $key => $position) {
             if ($position == 0) {
                 $validate = true;
