@@ -5,12 +5,11 @@ namespace Tests\Integration;
 use Tests\Setup;
 use Tests\TestCase;
 use App\Models\Matches;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Support\TicTacToeSupport;
 
 class MatchTest extends Setup
 {
-    // use RefreshDatabase;
-    // use DatabaseTransactions;
+    use TicTacToeSupport;
 
     /**
      * Test to get all matches
@@ -89,25 +88,5 @@ class MatchTest extends Setup
         $response->assertStatus(200);
         $response->assertJsonStructure([$this->getStructureMatch()]);
         $response->assertJsonMissing([$match->name]);
-    }
-
-    private function getStructureMatch()
-    {
-        $match = factory(Matches::class)->make();
-        return array_keys($match->getAttributes());
-    }
-
-    private function getMovement($board)
-    {
-        $newBoard = [];
-        foreach ($board as $key => $value) {
-            if ($value != 0) {
-                unset($board[$key]);
-            }
-        }
-        if (count($board) == 0) {
-            return 0;
-        }
-        return array_rand($board, 1);
     }
 }
