@@ -18,11 +18,6 @@ class MatchController extends Controller
         $this->matchBusiness = $matchBusiness;
     }
 
-    public function index()
-    {
-        return view('index');
-    }
-
     /**
      * Returns a list of matches
      *
