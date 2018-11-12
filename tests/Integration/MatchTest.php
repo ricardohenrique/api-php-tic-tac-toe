@@ -51,6 +51,33 @@ class MatchTest extends Setup
     }
 
     /**
+     * Test to play match
+     *
+     * @return void
+     */
+    public function testPlayMatch()
+    {
+        for ($i = 0; $i < 5; $i++) { 
+            $validateMatch = false;
+            $match = factory(Matches::class)->create();
+
+            while ($validateMatch == false) {
+                $responseGetMatch = Matches::find($match->id);
+                $board = $responseGetMatch->board;
+                $movement = $this->getMovement($board);
+
+                $response = $this->put('/api/match/'.$match->id, ["position" => $movement]);
+                $jsonResponse = json_decode($response->getContent());
+                if($response->getStatusCode() == 400){
+                    $response->assertStatus(400);
+                    $response->assertJson(["match-already-finished"]);
+                    $validateMatch = true;
+                }
+            }
+        }
+    }
+
+    /**
      * Test to delete match
      *
      * @return void
@@ -68,6 +95,19 @@ class MatchTest extends Setup
     {
         $match = factory(Matches::class)->make();
         return array_keys($match->getAttributes());
+    }
 
+    private function getMovement($board)
+    {
+        $newBoard = [];
+        foreach ($board as $key => $value) {
+            if($value != 0){
+                unset($board[$key]);
+            }
+        }
+        if(count($board) == 0){
+            return 0;
+        }
+        return array_rand($board, 1);
     }
 }
