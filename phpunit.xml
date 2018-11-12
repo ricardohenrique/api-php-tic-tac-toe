@@ -33,7 +33,7 @@
         <env name="MAIL_DRIVER" value="array"/>
     </php>
     <logging>
-        <log type="coverage-html" target="tests/_reports/coverage" charset="UTF-8" yui="true" highlight="true" lowUpperBound="50" highLowerBound="80" />
-        <log type="testdox-text" target="tests/_reports/testdox/executed.txt"/>
+        <log type="coverage-html" target="public/_reports/coverage" charset="UTF-8" yui="true" highlight="true" lowUpperBound="50" highLowerBound="80" />
+        <log type="testdox-text" target="public/_reports/testdox/executed.txt"/>
     </logging>
 </phpunit>
