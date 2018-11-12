@@ -57,7 +57,7 @@ class MatchTest extends Setup
      */
     public function testPlayMatch()
     {
-        for ($i = 0; $i < 5; $i++) { 
+        for ($i = 0; $i < 5; $i++) {
             $validateMatch = false;
             $match = factory(Matches::class)->create();
 
@@ -68,7 +68,7 @@ class MatchTest extends Setup
 
                 $response = $this->put('/api/match/'.$match->id, ["position" => $movement]);
                 $jsonResponse = json_decode($response->getContent());
-                if($response->getStatusCode() == 400){
+                if ($response->getStatusCode() == 400) {
                     $response->assertStatus(400);
                     $response->assertJson(["match-already-finished"]);
                     $validateMatch = true;
@@ -101,11 +101,11 @@ class MatchTest extends Setup
     {
         $newBoard = [];
         foreach ($board as $key => $value) {
-            if($value != 0){
+            if ($value != 0) {
                 unset($board[$key]);
             }
         }
-        if(count($board) == 0){
+        if (count($board) == 0) {
             return 0;
         }
         return array_rand($board, 1);

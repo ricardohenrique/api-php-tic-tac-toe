@@ -13,7 +13,7 @@ class MatchController extends Controller
 {
     public $matchBusiness;
 
-    function __construct(MatchBusiness $matchBusiness)
+    public function __construct(MatchBusiness $matchBusiness)
     {
         $this->matchBusiness = $matchBusiness;
     }
@@ -30,7 +30,7 @@ class MatchController extends Controller
      */
     public function matches()
     {
-        return response()->json($this->matchBusiness->getMatch()); 
+        return response()->json($this->matchBusiness->getMatch());
     }
 
     /**
@@ -63,7 +63,7 @@ class MatchController extends Controller
         } catch (IllegalMovementException $e) {
             Log::info($e->getMessage());
             return response()->json([$e->getMessage()], 400);
-        }  
+        }
     }
 
     /**
