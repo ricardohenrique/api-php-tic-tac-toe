@@ -3,20 +3,20 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Input;
-use App\Models\Matches;
+use App\Http\Requests\MatchesMoveRequest;
+use App\Business\MatchBusiness;
+use App\Exceptions\MatchAlreadyFinishedException;
+use App\Exceptions\IllegalMovementException;
+use Log;
 
 class MatchController extends Controller
 {
-    /**
-      * Variable to define board default
-      * @access public
-      * @name $BOARD
-    */
-    public static $BOARD = [
-        0, 0, 0,
-        0, 0, 0,
-        0, 0, 0,
-    ];
+    public $matchBusiness;
+
+    function __construct(MatchBusiness $matchBusiness)
+    {
+        $this->matchBusiness = $matchBusiness;
+    }
 
     public function index()
     {
@@ -30,7 +30,7 @@ class MatchController extends Controller
      */
     public function matches()
     {
-        return response()->json(Matches::all()->toArray());
+        return response()->json($this->matchBusiness->getMatch()); 
     }
 
     /**
@@ -41,7 +41,7 @@ class MatchController extends Controller
      */
     public function match($id)
     {
-        return response()->json(Matches::find($id)->toArray());
+        return response()->json($this->matchBusiness->getMatch($id));
     }
 
     /**
@@ -50,22 +50,20 @@ class MatchController extends Controller
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function move($id)
+    public function move(MatchesMoveRequest $request, $id)
     {
-        $position = Input::get('position');
+        try {
+            $position = Input::get('position');
+            $this->matchBusiness->makeMovement($id, $position);
 
-        $match                     = Matches::find($id)->toArray();
-        $match['board'][$position] = $match['next'];
-
-        $win = $this->validateWinner($match['board'], $match['next']);
-
-        Matches::where('id', $id)->update([
-            'next'   => $this->getWhoIsNext($match['next']),
-            'board'  => json_encode($match['board']),
-            'winner' => $win
-        ]);
-
-        return response()->json(Matches::find($id)->toArray());
+            return response()->json($this->matchBusiness->getMatch($id));
+        } catch (MatchAlreadyFinishedException $e) {
+            Log::info($e->getMessage());
+            return response()->json([$e->getMessage()], 400);
+        } catch (IllegalMovementException $e) {
+            Log::info($e->getMessage());
+            return response()->json([$e->getMessage()], 400);
+        }  
     }
 
     /**
@@ -75,13 +73,8 @@ class MatchController extends Controller
      */
     public function create()
     {
-        Matches::create([
-            'name' => 'Match',
-            'next' => rand(1, 2),
-            'winner' => 0,
-            'board' => self::$BOARD,
-        ]);
-        return response()->json(Matches::all()->toArray());
+        $this->matchBusiness->createMatch();
+        return response()->json($this->matchBusiness->getMatch());
     }
 
     /**
@@ -92,113 +85,7 @@ class MatchController extends Controller
      */
     public function delete($id)
     {
-        Matches::destroy($id);
-        return response()->json(Matches::all()->toArray());
-    }
-
-
-    /**
-      * Method to validate if someone wins the match
-      * @access private
-      * @param array $board
-      * @param int $player
-      * @return int
-    */
-    private function validateWinner(array $board, int $player) : int
-    {
-        $win = 0;
-
-        $canWin = [
-             // lines
-            [$board[0], $board[1], $board[2]],
-            [$board[3], $board[4], $board[5]],
-            [$board[6], $board[7], $board[8]],
-
-            // columns
-            [$board[0], $board[3], $board[6]],
-            [$board[1], $board[4], $board[7]],
-            [$board[2], $board[5], $board[8]],
-
-            // diagonals
-            [$board[0], $board[4], $board[8]],
-            [$board[2], $board[4], $board[6]]
-        ];
-        
-        foreach ($canWin as $key => $can) {
-            if (!(in_array(0, $can) || in_array($this->getWhoIsNext($player), $can))) {
-                $win = $player;
-            }
-        }
-
-        return $win;
-    }
-
-    /**
-      * Method to get whi is the next player
-      * @access private
-      * @param int $currentPlayer
-      * @return int
-    */
-    private function getWhoIsNext($currentPlayer) : int
-    {
-        if ($currentPlayer == 1) {
-            return 2;
-        }
-        return 1;
-    }
-
-    /**
-     * Creates a fake array of matches
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    private function fakeMatches()
-    {
-        return collect([
-            [
-                'id' => 1,
-                'name' => 'Match1',
-                'next' => 2,
-                'winner' => 1,
-                'board' => [
-                    1, 0, 2,
-                    0, 1, 2,
-                    0, 2, 1,
-                ],
-            ],
-            [
-                'id' => 2,
-                'name' => 'Match2',
-                'next' => 1,
-                'winner' => 0,
-                'board' => [
-                    1, 0, 2,
-                    0, 1, 2,
-                    0, 0, 0,
-                ],
-            ],
-            [
-                'id' => 3,
-                'name' => 'Match3',
-                'next' => 1,
-                'winner' => 0,
-                'board' => [
-                    1, 0, 2,
-                    0, 1, 2,
-                    0, 2, 0,
-                ],
-            ],
-            [
-                'id' => 4,
-                'name' => 'Match4',
-                'next' => 2,
-                'winner' => 0,
-                'board' => [
-                    0, 0, 0,
-                    0, 0, 0,
-                    0, 0, 0,
-                ],
-            ],
-        ]);
+        $this->matchBusiness->deleteMatch($id);
+        return response()->json($this->matchBusiness->getMatch());
     }
 }
