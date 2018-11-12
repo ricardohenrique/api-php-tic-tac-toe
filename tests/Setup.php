@@ -9,7 +9,7 @@ use Mockery;
 
 class Setup extends TestCase
 {
-    use DatabaseTransactions;
+    // use DatabaseTransactions;
     // use RefreshDatabase;
 
     /**
@@ -18,15 +18,16 @@ class Setup extends TestCase
     public function setUp()
     {
         parent::setUp();
+        DB::beginTransaction();
     }
 
     /**
      * @after
      */
-    public function cleanTransaction()
+    public function tearDown()
     {
-        // Mockery::close();
-        // DB::rollBack();
-        // DB::disconnect();
+        Mockery::close();
+        DB::rollBack();
+        DB::disconnect();
     }
 }

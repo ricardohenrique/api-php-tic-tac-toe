@@ -3,10 +3,15 @@
 namespace Tests\Integration;
 
 use Tests\Setup;
+use Tests\TestCase;
 use App\Models\Matches;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class MatchTest extends Setup
 {
+    // use RefreshDatabase;
+    // use DatabaseTransactions;
+
     /**
      * Test to get all matches
      *
