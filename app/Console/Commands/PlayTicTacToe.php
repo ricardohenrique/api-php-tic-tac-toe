@@ -11,8 +11,8 @@ class PlayTicTacToe extends Command
     use TicTacToeSupport;
 
     /**
-      * Const to define board default
-      * @access public
+      * Variable to define default board 
+      * @access private
       * @name $BOARD
     */
     private static $BOARD = [
@@ -22,8 +22,7 @@ class PlayTicTacToe extends Command
     ];
 
     /**
-      * Variable to define players default
-      * @access public
+      * Const to define players default
       * @name PLAYERS
     */
     const PLAYERS = [

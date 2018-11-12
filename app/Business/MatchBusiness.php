@@ -19,7 +19,7 @@ class MatchBusiness
      */
     public function getMatch(int $matchId = 0) : array
     {
-        $matches = new Matches;
+        $matches = new Matches();
         if ($matchId) {
             return $matches->where("id", $matchId)->first()->toArray();
         }
@@ -31,7 +31,7 @@ class MatchBusiness
      * @access public
      * @param integer $matchId | id of some match
      * @param integer $position | number of some position in the board
-     * @return array
+     * @return void
      */
     public function makeMovement(int $matchId, int $position) : void
     {
@@ -53,7 +53,7 @@ class MatchBusiness
     }
 
     /**
-     * Creates a new match and returns it
+     * Creates a new match and return it
      * @access public
      * @return array
      */
@@ -63,10 +63,10 @@ class MatchBusiness
     }
 
     /**
-     * Delete the match
+     * Delete a match
      * @access public
      * @param integer $matchId | id of some match
-     * @return array
+     * @return bool
      */
     public function deleteMatch($matchId) : bool
     {

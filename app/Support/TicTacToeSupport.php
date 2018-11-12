@@ -10,7 +10,7 @@ trait TicTacToeSupport
       * Method to validate movement
       * @access public
       * @param array $board
-      * @return boolean
+      * @return bool
     */
     public function validateMovement(array $board, int $position) : bool
     {
@@ -25,7 +25,7 @@ trait TicTacToeSupport
       * Method to validate board
       * @access public
       * @param array $board
-      * @return boolean
+      * @return bool
     */
     public function validateBoard(array $board) : bool
     {
@@ -76,7 +76,7 @@ trait TicTacToeSupport
     }
 
     /**
-      * Method to get whi is the next player
+      * Method to get who is the next player
       * @access public
       * @param int $currentPlayer
       * @return int
@@ -90,9 +90,9 @@ trait TicTacToeSupport
     }
 
     /**
-      * Method to get Structure of table match
+      * Method to get structure of table match
       * @access public
-      * @return int
+      * @return array
     */
     public function getStructureMatch() : array
     {
