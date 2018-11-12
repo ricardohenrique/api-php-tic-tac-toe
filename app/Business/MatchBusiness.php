@@ -43,7 +43,7 @@ class MatchBusiness
 	 */ 
     public function makeMovement(int $matchId, int $position) : void
     {
-        $match = $this->getMatche($matchId);
+        $match = $this->getMatch($matchId);
         if(($match['winner'] != 0) || (!$this->validateBoard($match['board']))) {
         	throw new MatchAlreadyFinishedException("match-already-finished");
         }
