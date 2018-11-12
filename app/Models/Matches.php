@@ -20,9 +20,9 @@ class Matches extends Model
      ];
 
     protected $hidden = [
-         'created_at', 
-         'updated_at', 
-         'deleted_at'
+        'created_at',
+        'updated_at',
+        'deleted_at'
     ];
 
     public function getBoardAttribute($value)
@@ -32,6 +32,6 @@ class Matches extends Model
 
     public function setBoardAttribute($value)
     {
-    	$this->attributes['board'] = json_encode($value);
+        $this->attributes['board'] = json_encode($value);
     }
 }
