@@ -121,18 +121,4 @@ class MatchTest extends Setup
         $response->assertJsonMissing([$match->name]);
     }
 
-
-    /**
-     * Test to delete match
-     *
-     * @return void
-     */
-    public function testCommandMatch()
-    {
-        $this->artisan('php artisan tictactoe:play')
-         // ->expectsQuestion('What is your name?', 'Taylor Otwell')
-         // ->expectsQuestion('Which language do you program in?', 'PHP')
-         // ->expectsOutput('Your name is Taylor Otwell and you program in PHP.')
-         ->assertExitCode(0);
-    }
 }
